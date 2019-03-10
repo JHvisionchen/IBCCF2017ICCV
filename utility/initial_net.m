@@ -4,7 +4,7 @@ function initial_net(opts)
 global net;
 enableGPU = opts.enableGPU;
 
-net = load(fullfile('model', 'imagenet-vgg-verydeep-19.mat'));
+net = load(fullfile('/media/cjh/cvpaper/git/models', 'imagenet-vgg-verydeep-19.mat'));
 
 % Remove the fully connected layers and classification layer
 net.layers(37+1:end) = [];

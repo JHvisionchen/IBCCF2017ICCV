@@ -33,5 +33,5 @@ opts.scale_factor = 1.2;  % the scale factor for ADMM algorithm
 opts.enableGPU = true;
 
 % Visualize the tracking or not
-opts.show_visualization = false;
+opts.show_visualization = true;
 end

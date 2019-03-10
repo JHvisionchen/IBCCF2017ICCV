@@ -1,13 +1,11 @@
-
-% This demo script runs the IBCCF on the specified videos.
-
+warning('off','all');
 % Add paths
 setup_paths();
-
 % Load video information
-video_path = '/media/chen/Data/Benchmark/data_seq/sacleStaticShip/';
-
+base_path = '/media/cjh/datasets/tracking/OTB100/';
+video = choose_video(base_path);
+video_path=[base_path video];
+% video_path = '/media/cjh/datasets/tracking/OTB100/Basketball';
 [seq, ground_truth] = load_video_info(video_path);
-
 % Run IBCCF
 results = run_IBCCF(seq);

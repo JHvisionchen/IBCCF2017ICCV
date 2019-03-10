@@ -78,11 +78,6 @@ cos_window_vert =  hann(size(yf_vert, 1));
 cos_window_horz(1:floor(size(yf_horz,2) / 2)) = cos_window_horz(1:floor(size(yf_horz, 2) / 2)) * decay_ratio;
 cos_window_vert(1:floor(size(yf_vert,1) / 2)) = cos_window_vert(1:floor(size(yf_vert, 1) / 2)) * decay_ratio;
 
-% Create video interface for visualization
-if(show_visualization)
-    update_visualization = show_video(img_files, video_path);
-end
-
 % Initialize the variables
 positions = zeros(numel(img_files), 4);
 boundary_positions = zeros(numel(img_files), 4);
@@ -176,12 +171,24 @@ for frame = 1:numel(img_files)
     % ================================================================================
     positions(frame,:) = [cur_pos([2,1]) - cur_target_sz([2,1])/2, cur_target_sz([2,1])];    
     time = time + toc();
-    
-    % Visualization
+    %visualization
     if show_visualization,
         box = [cur_pos([2,1]) - cur_target_sz([2,1])/2, cur_target_sz([2,1])];
-        stop = update_visualization(frame, box);
-        if stop, break, end  %user pressed Esc, stop early
+        if frame == 1,  %first frame, create GUI
+            figure('Number','off', 'Name',['Tracker - ' video_path]);
+            im_handle = imshow(uint8(im), 'Border','tight', 'InitialMag', 100 + 100 * (length(im) < 500));
+            rect_handle = rectangle('Position',box, 'EdgeColor','g');
+            text_handle = text(10, 10, int2str(frame));
+            set(text_handle, 'color', [0 1 1]);
+        else
+            try  %subsequent frames, update GUI
+                set(im_handle, 'CData', im)
+                set(rect_handle, 'Position', box)
+                set(text_handle, 'string', int2str(frame));
+            catch
+                return
+            end
+        end
         drawnow
     end
 end
